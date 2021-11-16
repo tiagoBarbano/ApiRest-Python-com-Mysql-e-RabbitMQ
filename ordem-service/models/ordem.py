@@ -39,7 +39,11 @@ class OrdemModel(db.Model):
 
     @classmethod
     def find_by_idwallet(cls, idwallet):
-        return cls.query.filter_by(idwallet=idwallet).first()
+        ordens = db.session.query(OrdemModel).filter_by(id_wallet=idwallet)
+        print(ordens)
+        result = ordem_schema.dump(ordens)
+        print(result)
+        return jsonify(result)    
 
     @classmethod
     def find_by_id(cls, _id):

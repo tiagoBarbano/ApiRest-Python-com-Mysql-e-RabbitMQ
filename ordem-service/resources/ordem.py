@@ -8,6 +8,8 @@ from resources.rabbitmq import emit_user_profile_update
 ordem_schema = OrdemModelSchema
 ordem_schema = OrdemModelSchema(many=False)
 message_help = "This field cannot be blank."
+message_consulta_sucesso = 'Consulta Realizada com sucesso.'
+message_consulta_erro = 'Problema na consulta.'
 
 class Ordem(Resource):
     parser = reqparse.RequestParser()
@@ -43,12 +45,12 @@ class OrdemList(Resource):
     def get(self):
         try:
             ordens = OrdemModel.find_all()
-            response = jsonify(message='Consulta Realizada com sucesso.')
+            response = jsonify(message=message_consulta_sucesso)
             response.status_code = 200
             response = ordens
         except Exception as e:
             print(e)
-            response = jsonify(message='Problema na consulta.')
+            response = jsonify(message=message_consulta_erro)
             response.status_code = 400
         finally:
             return(response)
@@ -57,12 +59,26 @@ class OrdemById(Resource):
     def get(self, id):
         try:
             ordem = OrdemModel.find_by_id(id)
-            response = jsonify(message='Consulta Realizada com sucesso.')
+            response = jsonify(message=message_consulta_sucesso)
             response.status_code = 200
             response = ordem
         except Exception as e:
             print(e)
-            response = jsonify(message='Problema na consulta.')
+            response = jsonify(message=message_consulta_erro)
             response.status_code = 400
         finally:
             return(response)               
+
+class OrdemByWallet(Resource):
+    def get(self, id):
+        try:
+            ordem = OrdemModel.find_by_idwallet(id)
+            response = jsonify(message=message_consulta_sucesso)
+            response.status_code = 200
+            response = ordem
+        except Exception as e:
+            print(e)
+            response = jsonify(message=message_consulta_erro)
+            response.status_code = 400
+        finally:
+            return(response)             
